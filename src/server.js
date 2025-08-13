@@ -31,7 +31,7 @@ export function setupServer() {
     });
   });
 
-  app.use(contactsRouter);
+  app.use('/', contactsRouter);
 
   // 404 handler
   app.use('/*splat', notFoundHandler);
