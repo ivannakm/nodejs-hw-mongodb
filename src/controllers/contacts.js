@@ -2,20 +2,23 @@ import createHttpError from 'http-errors';
 import {
   createContact,
   deleteContactById,
-  getAllContacts,
   getContactById,
+  getContactsPerPage,
   updateContactById,
 } from '../services/contacts.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
-export const getContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
+// export const getContactsController = async (req, res) => {
+//   const contacts = await getAllContacts();
 
-  res.json({
-    status: 200,
-    message: 'Successfully found contacts!',
-    data: contacts,
-  });
-};
+//   res.json({
+//     status: 200,
+//     message: 'Successfully found contacts!',
+//     data: contacts,
+//   });
+// };
 
 export const getContactByIdController = async (req, res, next) => {
   const { contactId } = req.params;
@@ -72,4 +75,25 @@ export const deleteContactByIdController = async (req, res) => {
   }
 
   res.status(204).send();
+};
+
+//PAGINATION
+export const getContactsPerPageController = async (req, res) => {
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query); // sorting
+  const filter = parseFilterParams(req.query); // filter
+
+  const contactsWithPagination = await getContactsPerPage({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully found contacts!',
+    data: contactsWithPagination,
+  });
 };
