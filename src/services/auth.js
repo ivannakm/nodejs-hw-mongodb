@@ -3,7 +3,10 @@ import { randomBytes } from 'crypto';
 import createHttpError from 'http-errors';
 import { UsersCollection } from '../db/models/user.js';
 import { SessionsCollection } from '../db/models/session.js';
-import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
+import { FIFTEEN_MINUTES, SMTP, THIRTY_DAYS } from '../constants/index.js';
+import jwt from 'jsonwebtoken';
+import { getEnvVar } from '../utils/getEnvVar.js';
+import { sendEmail } from '../utils/sendMail.js';
 
 ///register
 
@@ -98,4 +101,35 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
 
 export const logoutUser = async (sessionId) => {
   await SessionsCollection.deleteOne({ _id: sessionId });
+};
+
+/// requestResetToken
+
+export const requestResetToken = async (email) => {
+  const user = await UsersCollection.findOne({ email });
+  if (!user) {
+    throw createHttpError(404, 'User not found!');
+  }
+
+  const token = jwt.sign(
+    { sub: user._id, email }, // You could also include `sub: user._id` if needed
+    getEnvVar('JWT_SECRET'),
+    { expiresIn: '5m' },
+  );
+
+  const resetUrl = `${getEnvVar('APP_DOMAIN')}/reset-password?token=${token}`;
+
+  try {
+    await sendEmail({
+      from: getEnvVar(SMTP.SMTP_FROM),
+      to: email,
+      subject: 'Reset your password',
+      html: `<p>Click <a href="${resetUrl}">here</a> to reset your password.</p>`,
+    });
+  } catch (error) {
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
 };
