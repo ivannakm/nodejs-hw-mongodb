@@ -10,6 +10,7 @@ import {
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 // GET ONE
 export const getContactByIdController = async (req, res, next) => {
@@ -32,8 +33,14 @@ export const getContactByIdController = async (req, res, next) => {
 // POST
 export const createContactController = async (req, res) => {
   const userId = req.user._id;
+  const photo = req.file;
 
-  const contact = await createContact(req.body, userId);
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToCloudinary(photo);
+  }
+
+  const contact = await createContact({ ...req.body, photo: photoUrl }, userId);
 
   res.status(201).json({
     status: 201,
@@ -47,6 +54,13 @@ export const updateContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const userId = req.user._id;
   const updates = req.body;
+  const photo = req.file;
+
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToCloudinary(photo);
+    updates.photo = photoUrl;
+  }
 
   const updatedContact = await updateContactById(contactId, userId, updates);
 
