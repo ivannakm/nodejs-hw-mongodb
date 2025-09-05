@@ -28,6 +28,8 @@ const contactSchema = new Schema(
       ref: 'User',
       required: true,
     },
+    photo: { type: String },
+    owner: { type: Schema.Types.ObjectId, ref: 'User' },
   },
   {
     timestamps: true,
