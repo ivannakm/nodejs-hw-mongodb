@@ -40,13 +40,15 @@
     "nodemailer": "^7.0.6",
     "pino": "^9.8.0",
     "pino-http": "^10.5.0",
-    "pino-pretty": "^13.1.1"
+    "pino-pretty": "^13.1.1",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@redocly/cli": "^2.1.0",
     "eslint": "^9.32.0",
     "globals": "^16.3.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "redoc-cli": "^0.13.21"
   }
 }
