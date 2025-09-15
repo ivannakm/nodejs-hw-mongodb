@@ -42,7 +42,7 @@
         "parameters": [
           {
             "in": "query",
-            "name": "page",
+            "name": "perPage",
             "schema": {
               "type": "integer"
             },
@@ -139,7 +139,7 @@
                     "type": "string",
                     "format": "email"
                   },
-                  "phone": {
+                  "phoneNumber": {
                     "type": "string"
                   },
                   "isFavourite": {
@@ -148,9 +148,13 @@
                   "photo": {
                     "type": "string",
                     "format": "binary"
+                  },
+                  "contactType": {
+                    "type": "string",
+                    "description": "Type of contact (e.g., personal, work)"
                   }
                 },
-                "required": ["name", "email", "phone"]
+                "required": ["name", "phoneNumber"]
               }
             }
           }
@@ -213,6 +217,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
           }
         }
       },
@@ -250,7 +257,7 @@
                     "type": "string",
                     "format": "email"
                   },
-                  "phone": {
+                  "phoneNumber": {
                     "type": "string"
                   },
                   "isFavourite": {
@@ -259,6 +266,10 @@
                   "photo": {
                     "type": "string",
                     "format": "binary"
+                  },
+                  "contactType": {
+                    "type": "string",
+                    "description": "Type of contact (e.g., personal, work)"
                   }
                 }
               }
@@ -316,6 +327,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
           }
         }
       }
@@ -346,6 +360,9 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           }
         }
       }
@@ -382,7 +399,7 @@
                       "type": "string",
                       "format": "email"
                     },
-                    "phone": {
+                    "phoneNumber": {
                       "type": "string"
                     },
                     "isFavourite": {
@@ -391,9 +408,13 @@
                     "photo": {
                       "type": "string",
                       "format": "binary"
+                    },
+                    "contactType": {
+                      "type": "string",
+                      "description": "Type of contact (e.g., personal, work)"
                     }
                   },
-                  "required": ["name", "email", "phone"]
+                  "required": ["name", "phoneNumber"]
                 }
               }
             }
@@ -439,6 +460,10 @@
           "isFavourite": {
             "type": "boolean",
             "example": true
+          },
+          "contactType": {
+            "type": "string",
+            "description": "Type of contact (e.g., personal, work)"
           }
         }
       },
@@ -529,6 +554,27 @@
                 "message": {
                   "type": "string",
                   "example": "Contact not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Conflict - User already exists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["status", "message"],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User already exists"
                 }
               }
             }
