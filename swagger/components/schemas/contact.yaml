@@ -2,21 +2,38 @@ type: object
 required:
   - _id
   - name
-  - email
-  - phone
+  - phoneNumber
+  - contactType
 properties:
   _id:
+    description: "Contact's id"
     type: string
-    example: 123abc456
+    example: '6894bf220e3fff20412e39a6'
   name:
+    description: "Contact's name"
     type: string
-    example: Alice Johnson
+    example: 'Yulia Shevchenko'
+  phoneNumber:
+    description: "Contact's phoneNumber"
+    type: string
+    example: '+380000000001'
+  contactType:
+    description: "Contact's contactType"
+    type: string
+    enum: ['work', 'home', 'personal']
+  userId:
+    description: 'Contact user id'
+    type: string
+    example: '6894bf220e3fff20412e39a6'
   email:
+    description: "Contact's email"
     type: string
-    example: alice@example.com
-  phone:
-    type: string
-    example: +123456789
-  favorite:
+    example: 'oleh1@example.com'
+  isFavourite:
+    description: 'Is contact favorite'
     type: boolean
-    example: true
+    example: false
+  photo:
+    description: "Contact's photo"
+    type: string
+    format: binary
