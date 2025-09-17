@@ -11,11 +11,13 @@ parameters:
     schema:
       type: integer
     example: 1
+
   - in: query
     name: perPage
     schema:
       type: integer
-      example: 10
+    example: 10
+
   - in: query
     name: sortBy
     schema:
@@ -32,12 +34,29 @@ parameters:
         ]
     example: '_id'
     description: "All contact's fields can be mentioned. Default value - _id"
+
   - in: query
     name: sortOrder
     schema:
       type: string
       enum: ['asc', 'desc']
-      example: 'asc'
+    example: 'asc'
+
+  - in: query
+    name: type
+    schema:
+      type: string
+      enum: ['work', 'home', 'personal']
+    example: 'home'
+    description: Filter contacts by contact type
+
+  - in: query
+    name: isFavourite
+    schema:
+      type: boolean
+    example: true
+    description: Filter contacts by favorite status
+
 responses:
   '200':
     description: Successfully found contacts!
@@ -89,5 +108,6 @@ responses:
                 hasPrevPage:
                   type: boolean
                   example: true
+
   '401':
     $ref: '../../components/responses/401.yaml'
